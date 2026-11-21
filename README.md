@@ -7,10 +7,10 @@ Extensión de Chrome para docentes. Conserva las notas personales por curso y pe
 1. Con Node.js 22.13 o posterior, ejecuta `npm ci` y `npm run build` en la raíz del proyecto. El segundo comando prepara en `vendor/` el lector de PDF, el motor de OCR y el modelo de español.
 2. En `chrome://extensions`, activa **Modo de desarrollador** y carga esta carpeta descomprimida. Si ya usabas las notas, actualiza la extensión desde la misma carpeta y perfil de Chrome para conservarlas. Copia el ID que muestra Chrome.
 3. En Google Cloud, habilita **Google Classroom API** y **Google Drive API**. Configura la audiencia y el consentimiento OAuth con los permisos que figuran en `manifest.json`. Si la aplicación está en pruebas, agrega la cuenta docente como usuario de prueba cuando corresponda.
-4. Crea un cliente OAuth de tipo **Extensión de Chrome** y registra el ID de extensión del paso 2. Sustituye `CONFIGURAR.apps.googleusercontent.com` en `manifest.json` por el **ID de cliente OAuth** que devuelve Google. Recarga la extensión y la página de Classroom. El cliente de Chrome utiliza un identificador público.
-5. Abre **Mis notas → Analizar exámenes** en Classroom o pulsa el icono de la extensión. Selecciona **Conectar con Google** con el perfil de Chrome del docente y elige un curso.
+4. Crea un cliente OAuth de tipo **Aplicación web**. En **URI de redirección autorizados** agrega exactamente `https://ID_DE_LA_EXTENSION.chromiumapp.org/`, con el ID del paso 2 y la barra final. No uses un cliente de tipo Extensión de Chrome ni de escritorio: Google responde `Custom URI scheme is not supported on Chrome apps`. Sustituye `oauth2.client_id` en `manifest.json` por el ID de este cliente web y recarga la extensión. El identificador es público; no hace falta un secreto.
+5. Abre **Mis notas → Analizar exámenes** en Classroom o pulsa el icono de la extensión. Selecciona **Conectar con Google** con la cuenta docente y elige un curso.
 
-La cuenta necesita impartir el curso y tener acceso al material. Un dominio escolar puede requerir que su administrador habilite la aplicación. Para distribuir la extensión, registra un cliente OAuth asociado al ID de la versión distribuida. [Identidad y OAuth en extensiones de Chrome](https://developer.chrome.com/docs/extensions/how-to/integrate/oauth)
+La cuenta necesita impartir el curso y tener acceso al material. Un dominio escolar puede requerir que su administrador habilite la aplicación. Si publicas la extensión, su ID cambia: agrega también `https://ID_PUBLICADO.chromiumapp.org/` en el mismo cliente. [launchWebAuthFlow](https://developer.chrome.com/docs/extensions/reference/api/identity#method-launchWebAuthFlow)
 
 ## Preparar una evaluación
 

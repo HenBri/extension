@@ -62,8 +62,8 @@ try {
   await context.addInitScript(() => {
     if (!globalThis.chrome?.runtime?.getManifest) return;
     const manifest = chrome.runtime.getManifest();
-    chrome.runtime.getManifest = () => ({ ...manifest, oauth2: { client_id: "prueba" } });
-    chrome.identity.getAuthToken = async () => ({ token: "simulado" });
+    chrome.runtime.getManifest = () => ({ ...manifest, oauth2: { ...manifest.oauth2, client_id: "prueba" } });
+    chrome.identity.launchWebAuthFlow = async () => "https://" + chrome.runtime.id + ".chromiumapp.org/#access_token=simulado&expires_in=3600";
   });
   await page.goto("chrome-extension://" + id + "/panel.html");
   async function openCourse() {

@@ -2,7 +2,19 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { courseData, indexMaterials, createDraft, releaseDraft, findAssignment } from "../classroom.mjs";
 
-globalThis.chrome = { identity: { getAuthToken: async () => ({ token: "test" }) } };
+const session = {};
+globalThis.chrome = {
+  runtime: { getManifest: () => ({ oauth2: { client_id: "prueba.apps.googleusercontent.com", scopes: ["scope"] } }) },
+  identity: {
+    getRedirectURL: () => "https://ext.chromiumapp.org/",
+    launchWebAuthFlow: async () => "https://ext.chromiumapp.org/#access_token=test&expires_in=3600"
+  },
+  storage: { session: {
+    get: async key => ({ [key]: session[key] }),
+    set: async items => Object.assign(session, items),
+    remove: async key => delete session[key]
+  } }
+};
 test("importa todas las páginas de material y continúa tras un adjunto sin acceso", async () => {
   globalThis.fetch = async url => {
     url = new URL(url);

@@ -7,7 +7,7 @@
   "permissions": ["storage", "identity"],
   "host_permissions": ["https://classroom.googleapis.com/*", "https://www.googleapis.com/*"],
   "oauth2": {
-    "client_id": "CONFIGURAR.apps.googleusercontent.com",
+    "client_id": "656007076557-8mam8432f652srurfqoabi3t6br50n53.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/classroom.courses.readonly",
       "https://www.googleapis.com/auth/classroom.rosters.readonly",

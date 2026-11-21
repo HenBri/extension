@@ -1,22 +1,58 @@
 const api = "https://classroom.googleapis.com/v1/";
 const drive = "https://www.googleapis.com/drive/v3/files/";
 
+let memory;
+
 export async function authorize() {
-  if (chrome.runtime.getManifest().oauth2.client_id.startsWith("CONFIGURAR")) {
-    throw Error("Configura el ID de cliente OAuth de Chrome en manifest.json y recarga la extensión. Encontrarás los pasos en el README.");
+  await accessToken(true);
+}
+
+async function accessToken(interactive, fresh = false) {
+  const manifest = chrome.runtime.getManifest().oauth2;
+  if (!manifest?.client_id || manifest.client_id.startsWith("CONFIGURAR")) {
+    throw Error("Configura el ID de cliente OAuth de tipo Aplicación web en manifest.json y recarga la extensión. Encontrarás los pasos en el README.");
   }
-  await chrome.identity.getAuthToken({ interactive: true });
+  if (!fresh) {
+    if (!(memory?.expiresAt > Date.now() + 60000)) memory = (await chrome.storage.session.get("googleAuth")).googleAuth;
+    if (memory?.expiresAt > Date.now() + 60000) return memory.accessToken;
+  }
+  const redirect = chrome.identity.getRedirectURL();
+  const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+  url.searchParams.set("client_id", manifest.client_id);
+  url.searchParams.set("response_type", "token");
+  url.searchParams.set("redirect_uri", redirect);
+  url.searchParams.set("scope", manifest.scopes.join(" "));
+  url.searchParams.set("include_granted_scopes", "true");
+  if (interactive) url.searchParams.set("prompt", "select_account");
+  let redirected;
+  try {
+    redirected = await chrome.identity.launchWebAuthFlow({ url: url.href, interactive });
+  } catch (error) {
+    const cancelled = /did not approve|cancel/i.test(error?.message || "");
+    throw Error(cancelled ? "Acceso cancelado." :
+      "Google rechazó el acceso. El cliente tiene que ser de tipo Aplicación web y el URI de redirección autorizado tiene que ser exactamente " + redirect);
+  }
+  const params = new URLSearchParams(new URL(redirected || "https://invalid/").hash.slice(1));
+  const accessTokenValue = params.get("access_token");
+  if (!accessTokenValue) {
+    throw Error(params.get("error") === "access_denied" ? "Acceso cancelado." :
+      "Google no devolvió un token. Autoriza este URI de redirección en el cliente web: " + redirect);
+  }
+  memory = { accessToken: accessTokenValue, expiresAt: Date.now() + Number(params.get("expires_in") || 3600) * 1000 };
+  await chrome.storage.session.set({ googleAuth: memory });
+  return accessTokenValue;
 }
 
 async function request(url, options = {}) {
   for (let attempt = 0; attempt < 2; attempt++) {
-    const { token } = await chrome.identity.getAuthToken({ interactive: false });
+    const token = await accessToken(true, attempt > 0);
     const response = await fetch(url, { ...options, headers: {
       ...options.headers, Authorization: "Bearer " + token
     } });
     if (response.ok) return response;
     if (response.status === 401 && attempt === 0) {
-      await chrome.identity.removeCachedAuthToken({ token });
+      memory = null;
+      await chrome.storage.session.remove("googleAuth");
       continue;
     }
     const detail = await response.json().catch(() => ({}));
