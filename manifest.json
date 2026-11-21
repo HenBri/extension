@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Classroom Notas",
+  "version": "2.0.0",
+  "description": "Notas de clase, análisis de exámenes y guías de estudio por grupo.",
+  "minimum_chrome_version": "132",
+  "permissions": ["storage", "identity"],
+  "host_permissions": ["https://classroom.googleapis.com/*", "https://www.googleapis.com/*"],
+  "oauth2": {
+    "client_id": "CONFIGURAR.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/classroom.courses.readonly",
+      "https://www.googleapis.com/auth/classroom.rosters.readonly",
+      "https://www.googleapis.com/auth/classroom.topics.readonly",
+      "https://www.googleapis.com/auth/classroom.courseworkmaterials.readonly",
+      "https://www.googleapis.com/auth/classroom.coursework.students",
+      "https://www.googleapis.com/auth/drive.readonly"
+    ]
+  },
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Abrir el panel docente" },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://classroom.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

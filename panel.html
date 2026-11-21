@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel docente · Classroom Notas</title><link rel="stylesheet" href="panel.css">
+</head><body>
+  <header><div class="wrap"><span class="brand">Classroom Notas</span><span>Panel docente</span></div></header>
+  <main class="wrap">
+    <h1>Guías de estudio</h1>
+    <p class="intro">Identifica qué necesita repasar cada estudiante a partir de sus exámenes y del material de tu curso.</p>
+    <p id="status" role="status" aria-live="polite">Conecta tu cuenta docente para elegir una clase.</p>
+    <fieldset id="controls">
+      <section class="bar"><button id="connect">Conectar con Google</button>
+        <label id="courseLabel" hidden>Curso <select id="course"></select></label>
+        <button id="new" class="secondary" hidden>Nueva evaluación</button>
+      </section>
+      <div id="work" hidden>
+        <aside><details><summary id="catalogTitle">Material del curso</summary>
+          <ul id="catalog"></ul>
+        </details></aside>
+        <section id="upload">
+          <h2>Preparar la evaluación</h2>
+          <label>Nombre de la evaluación<input id="examName" maxlength="160" placeholder="Ej. Fracciones · Unidad 2"></label>
+          <label>Pauta por pregunta<textarea id="rubric" rows="5" spellcheck="false" placeholder="1 | Fracciones | 5/6 | Sumar con distinto denominador | 2/5 | Calcula 1/4 + 2/3."></textarea></label>
+          <p class="hint">Escribe una línea por pregunta. Separa con | el número, tema, respuesta aceptada y dificultad a reforzar. Puedes añadir una respuesta incorrecta frecuente y un ejercicio de práctica. Separa las respuestas alternativas con punto y coma.</p>
+          <label class="file">Importar solucionario en PDF<input id="keyFile" type="file" accept="application/pdf,.pdf"></label>
+          <details id="keyPreview" hidden><summary>Texto del solucionario</summary><pre id="keyText"></pre></details>
+          <h3>Exámenes de los estudiantes</h3>
+          <label class="file">Agregar archivos PDF<input id="files" type="file" accept="application/pdf,.pdf" multiple></label>
+          <div id="uploads"></div><p class="hint" id="missing"></p>
+          <button id="analyze">Analizar respuestas</button>
+        </section>
+        <section id="review" hidden><h2>Revisar diagnósticos</h2>
+          <p class="hint">Comprueba la evidencia de cada pregunta. Las respuestas pendientes quedan fuera del agrupamiento.</p>
+          <div id="results"></div>
+          <div class="actions"><button id="groups">Formar grupos</button><button id="backUpload" class="secondary">Editar exámenes y pauta</button></div>
+        </section>
+        <section id="grouping" hidden><h2>Organizar los grupos</h2>
+          <p class="hint">El tema con más errores confirmados determina la propuesta principal. Puedes cambiar el grupo de cada estudiante.</p>
+          <div id="members"></div>
+          <div class="actions"><button id="guides">Preparar guías</button><button id="backReview" class="secondary">Volver al diagnóstico</button></div>
+        </section>
+        <section id="preview" hidden><h2>Revisar y asignar las guías</h2>
+          <div id="drafts"></div><button id="backGroups" class="secondary">Volver a los grupos</button>
+        </section>
+      </div>
+    </fieldset>
+  </main><script type="module" src="panel.mjs"></script>
+</body></html>

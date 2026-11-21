@@ -1,0 +1,36 @@
+:root { font: 16px/1.5 "Segoe UI", Arial, sans-serif; color: #18322e; background: #f4f6f1; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.wrap { width: min(100% - 40px, 960px); margin-inline: auto; }
+header { color: #eef7ed; background: #15463d; }
+header .wrap { display: flex; justify-content: space-between; align-items: center; min-height: 60px; }
+.brand { font-weight: 700; }
+main { padding: 36px 0 64px; }
+h1 { font: 500 clamp(2.5rem, 7vw, 4rem)/1.08 Georgia, serif; letter-spacing: -.035em; margin: 0; }
+.intro { color: #4c625b; max-width: 65ch; }
+#status { border-inline-start: 3px solid #48806f; padding: 8px 14px; overflow-wrap: anywhere; }
+#status.error { border-color: #a23d2c; color: #862e20; }
+fieldset { padding: 0; border: 0; min-width: 0; }
+section, aside { border: 1px solid #ccd7cb; border-radius: 12px; background: #fff; margin-top: 16px; padding: clamp(16px, 3vw, 28px); }
+.bar, .actions, .entry { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.bar label { flex: 1; margin: 0; }
+.entry { padding: 12px 0; border-bottom: 1px solid #e3e8e0; }
+.entry > :first-child { flex: 1; min-width: min(190px, 100%); overflow-wrap: anywhere; }
+h2 { margin: 0 0 10px; font-size: 1.45rem; }
+h3 { margin: 22px 0 8px; }
+label { display: block; font-weight: 600; margin: 12px 0; }
+input, select, textarea, button { font: inherit; }
+input:not([type=file]), select, textarea { width: 100%; color: inherit; border: 1px solid #aabbb0; background: #fcfdfa; border-radius: 6px; padding: 8px 10px; margin-top: 4px; }
+textarea { display: block; resize: vertical; }
+button, ::file-selector-button { color: white; background: #185e50; border: 1px solid transparent; border-radius: 7px; padding: 9px 16px; cursor: pointer; }
+button:disabled { opacity: .55; cursor: wait; }
+button.secondary, ::file-selector-button { background: #eef4ec; border-color: #ccd7cb; color: #214c41; }
+.file input { display: block; margin-top: 6px; max-width: 100%; }
+.hint, small { color: #52635c; }
+summary { font-weight: 650; cursor: pointer; }
+article, .question { border-top: 1px solid #dbe3d8; padding: 14px 0; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 300px; overflow: auto; background: #f3f6f0; padding: 12px; }
+details { margin: 8px 0; }
+.actions { margin-top: 18px; }
+a { color: #165b50; }
+[hidden] { display: none !important; }
